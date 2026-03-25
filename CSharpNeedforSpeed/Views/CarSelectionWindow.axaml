@@ -1,0 +1,128 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CSharpNeedforSpeed.ViewModels"
+        x:Class="CSharpNeedforSpeed.Views.CarSelectionWindow"
+        Title="C# Need for Speed - Select Your Car"
+        Width="700" Height="450"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="#0f172a">
+
+    <Design.DataContext>
+        <vm:CarSelectionViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0"
+                   Text="SELECT YOUR CAR"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="#3b82f6"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,15" />
+
+        <!-- Car Selection Panel -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Car List -->
+            <Border Grid.Column="0"
+                    Background="#1e293b"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,0,10,0">
+                <ListBox ItemsSource="{Binding AvailableCars}"
+                         SelectedItem="{Binding SelectedCar}"
+                         Background="Transparent"
+                         Foreground="White">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="10,12"
+                                    Margin="2"
+                                    CornerRadius="6">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Text="{Binding Name}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="#60a5fa" />
+                                    <TextBlock FontSize="11"
+                                               Foreground="#64748b">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} km/h | {1}L tank">
+                                                <Binding Path="MaxSpeed" />
+                                                <Binding Path="FuelCapacity" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <!-- Car Details -->
+            <Border Grid.Column="1"
+                    Background="#1e293b"
+                    CornerRadius="8"
+                    Padding="20">
+                <ScrollViewer>
+                    <TextBlock Text="{Binding CarDetails}"
+                               FontSize="14"
+                               Foreground="#cbd5e1"
+                               TextWrapping="Wrap"
+                               FontFamily="Consolas,Courier New,monospace"
+                               LineHeight="22" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- Status Message -->
+        <TextBlock Grid.Row="2"
+                   Text="{Binding StatusMessage}"
+                   FontSize="13"
+                   Foreground="#f87171"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,5" />
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="15"
+                    Margin="0,5,0,0">
+            <Button Content="Back"
+                    Command="{Binding GoBackCommand}"
+                    Width="140"
+                    Height="40"
+                    FontSize="14"
+                    Background="#1e40af"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+            <Button Content="Start Race!"
+                    Command="{Binding StartRaceCommand}"
+                    Width="180"
+                    Height="40"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Background="#2563eb"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+        </StackPanel>
+    </Grid>
+</Window>
