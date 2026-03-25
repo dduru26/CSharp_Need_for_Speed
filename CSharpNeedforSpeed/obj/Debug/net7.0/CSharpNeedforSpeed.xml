@@ -1,0 +1,1281 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CSharpNeedforSpeed</name>
+    </assembly>
+    <members>
+        <member name="T:CSharpNeedforSpeed.App">
+            <summary>
+            The main Avalonia application class for C# Speed Rush.
+            Handles application initialisation and main window creation.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.App.Initialize">
+            <summary>
+            Initialises the application by loading AXAML resources.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.App.OnFrameworkInitializationCompleted">
+            <summary>
+            Called when the Avalonia framework has completed initialisation.
+            Sets up the main window with its DataContext.
+            </summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.Car">
+            <summary>
+            Abstract base class representing a car in the C# Speed Rush racing game.
+            Each car has unique speed, fuel consumption, and capacity characteristics
+            that affect gameplay strategy.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.Name">
+            <summary>
+            Gets the display name of the car.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.MaxSpeed">
+            <summary>
+            Gets the maximum speed of the car in kilometres per hour.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.FuelConsumptionRate">
+            <summary>
+            Gets the base fuel consumption rate per turn at maximum speed, in litres.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.FuelCapacity">
+            <summary>
+            Gets the total fuel tank capacity in litres.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.CurrentFuel">
+            <summary>
+            Gets or sets the current fuel level in the tank, in litres.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.CurrentSpeed">
+            <summary>
+            Gets or sets the current speed of the car in kilometres per hour.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.PitStopRefuelAmount">
+            <summary>
+            Gets the amount of fuel refuelled during a pit stop, in litres.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Car.PitStopTimePenalty">
+            <summary>
+            Gets the time penalty in seconds incurred during a pit stop.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.#ctor(System.String,System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.Car"/> class with the specified parameters.
+            </summary>
+            <param name="name">The display name of the car.</param>
+            <param name="maxSpeed">The maximum speed in km/h.</param>
+            <param name="fuelConsumptionRate">The base fuel consumption rate per turn.</param>
+            <param name="fuelCapacity">The total fuel tank capacity in litres.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.CalculateFuelUsage(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates the fuel usage for a given player action. Each car subclass
+            implements its own fuel consumption logic with unique multipliers.
+            </summary>
+            <param name="action">The player action to calculate fuel usage for.</param>
+            <returns>The amount of fuel consumed in litres for the given action.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unrecognized player action is provided.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.CalculateDistanceGained(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates the distance gained as a fraction of a lap (0.0 to 1.0)
+            for a given player action.
+            </summary>
+            <param name="action">The player action to calculate distance for.</param>
+            <returns>A value between 0.0 and 1.0 representing the fraction of a lap completed.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unrecognized player action is provided.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.GetSpeedUpDistance">
+            <summary>
+            Gets the distance fraction gained when speeding up. Override in subclasses for car-specific values.
+            </summary>
+            <returns>Distance as a fraction of a lap.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.GetMaintainDistance">
+            <summary>
+            Gets the distance fraction gained when maintaining speed. Override in subclasses for car-specific values.
+            </summary>
+            <returns>Distance as a fraction of a lap.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Car.ToString">
+            <summary>
+            Returns a formatted string representation of the car, including its name,
+            max speed, fuel consumption rate, and fuel capacity.
+            </summary>
+            <returns>A human-readable string describing the car's attributes.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.SportsCar">
+            <summary>
+            A high-performance sports car with excellent speed but high fuel consumption.
+            Ideal for aggressive racing strategies where speed is prioritised over fuel economy.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.SportsCar.PitStopRefuelAmount">
+            <summary>
+            Gets the amount of fuel refuelled during a pit stop (20 litres).
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.SportsCar.PitStopTimePenalty">
+            <summary>
+            Gets the time penalty incurred during a pit stop (10 seconds).
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.SportsCar.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.SportsCar"/> class
+            with preset performance characteristics.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.SportsCar.CalculateFuelUsage(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates fuel usage for the Sports Car based on the player action.
+            SpeedUp uses 1.5x the base rate, MaintainSpeed uses 1.0x, and PitStop uses no fuel.
+            </summary>
+            <param name="action">The player action to calculate fuel for.</param>
+            <returns>The fuel consumed in litres.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unrecognized action is provided.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.SportsCar.GetSpeedUpDistance">
+            <summary>
+            Gets the distance fraction gained when speeding up (0.25 of a lap).
+            </summary>
+            <returns>0.25 representing 25% of a lap.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.SportsCar.GetMaintainDistance">
+            <summary>
+            Gets the distance fraction gained when maintaining speed (0.18 of a lap).
+            </summary>
+            <returns>0.18 representing 18% of a lap.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.EcoCar">
+            <summary>
+            An eco-friendly car with moderate speed and excellent fuel efficiency.
+            Best suited for conservative strategies focused on completing the race
+            without running out of fuel.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.EcoCar.PitStopRefuelAmount">
+            <summary>
+            Gets the amount of fuel refuelled during a pit stop (15 litres).
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.EcoCar.PitStopTimePenalty">
+            <summary>
+            Gets the time penalty incurred during a pit stop (8 seconds).
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.EcoCar.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.EcoCar"/> class
+            with preset eco-friendly performance characteristics.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.EcoCar.CalculateFuelUsage(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates fuel usage for the Eco Car based on the player action.
+            SpeedUp uses 1.4x the base rate, MaintainSpeed uses 0.8x, and PitStop uses no fuel.
+            </summary>
+            <param name="action">The player action to calculate fuel for.</param>
+            <returns>The fuel consumed in litres.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unrecognized action is provided.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.EcoCar.GetSpeedUpDistance">
+            <summary>
+            Gets the distance fraction gained when speeding up (0.18 of a lap).
+            </summary>
+            <returns>0.18 representing 18% of a lap.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.EcoCar.GetMaintainDistance">
+            <summary>
+            Gets the distance fraction gained when maintaining speed (0.15 of a lap).
+            </summary>
+            <returns>0.15 representing 15% of a lap.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.MuscleCar">
+            <summary>
+            A powerful muscle car with high speed and a large fuel tank, but very high fuel consumption.
+            Offers the most distance per turn when speeding up, but burns through fuel quickly.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.MuscleCar.PitStopRefuelAmount">
+            <summary>
+            Gets the amount of fuel refuelled during a pit stop (25 litres).
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.MuscleCar.PitStopTimePenalty">
+            <summary>
+            Gets the time penalty incurred during a pit stop (12 seconds).
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.MuscleCar.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.MuscleCar"/> class
+            with preset high-power performance characteristics.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.MuscleCar.CalculateFuelUsage(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates fuel usage for the Muscle Car based on the player action.
+            SpeedUp uses 1.6x the base rate, MaintainSpeed uses 1.1x, and PitStop uses no fuel.
+            </summary>
+            <param name="action">The player action to calculate fuel for.</param>
+            <returns>The fuel consumed in litres.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when an unrecognized action is provided.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.MuscleCar.GetSpeedUpDistance">
+            <summary>
+            Gets the distance fraction gained when speeding up (0.30 of a lap).
+            </summary>
+            <returns>0.30 representing 30% of a lap.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.MuscleCar.GetMaintainDistance">
+            <summary>
+            Gets the distance fraction gained when maintaining speed (0.20 of a lap).
+            </summary>
+            <returns>0.20 representing 20% of a lap.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.PlayerAction">
+            <summary>
+            Represents a player action that can be taken each turn during the race.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.PlayerAction.SpeedUp">
+            <summary>Increase speed to gain more distance but consume more fuel.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.PlayerAction.MaintainSpeed">
+            <summary>Maintain current speed for a balanced distance and fuel trade-off.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.PlayerAction.PitStop">
+            <summary>Make a pit stop to refuel the car at the cost of time.</summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.RaceState">
+            <summary>
+            Represents the current state of the race.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.RaceState.NotStarted">
+            <summary>The race has not yet started.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.RaceState.InProgress">
+            <summary>The race is currently in progress.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.RaceState.Finished">
+            <summary>The race has been completed successfully (all laps finished).</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.RaceState.OutOfFuel">
+            <summary>The race ended because the car ran out of fuel.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Models.RaceState.OutOfTime">
+            <summary>The race ended because the timer expired.</summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.LapRecord">
+            <summary>
+            Stores information about a single lap during the race, including time spent,
+            fuel consumed, and the action taken by the player.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.LapRecord.LapNumber">
+            <summary>
+            Gets or sets the lap number this record corresponds to.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.LapRecord.TimeUsed">
+            <summary>
+            Gets or sets the time in seconds used during this lap segment.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.LapRecord.FuelUsed">
+            <summary>
+            Gets or sets the amount of fuel consumed during this lap segment.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.LapRecord.Action">
+            <summary>
+            Gets or sets the player action taken during this lap segment.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.LapRecord.#ctor(System.Int32,System.Double,System.Double,CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.LapRecord"/> struct.
+            </summary>
+            <param name="lapNumber">The lap number.</param>
+            <param name="timeUsed">The time used in seconds.</param>
+            <param name="fuelUsed">The fuel consumed in litres.</param>
+            <param name="action">The player action taken.</param>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.RaceManager">
+            <summary>
+            Manages the core game loop for a C# Speed Rush race. Handles turn processing,
+            fuel management, time tracking, lap progression, and event logging.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.ActiveCar">
+            <summary>
+            Gets the car currently being raced.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.ActiveTrack">
+            <summary>
+            Gets the track on which the race is taking place.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.TimeRemaining">
+            <summary>
+            Gets or sets the remaining time in seconds before the race ends due to timeout.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.TotalTime">
+            <summary>
+            Gets the total time allotted for the race in seconds.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.State">
+            <summary>
+            Gets or sets the current state of the race.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.LapHistory">
+            <summary>
+            Gets the history of all lap records recorded during the race.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.EventLog">
+            <summary>
+            Gets the event log queue containing the most recent race events (max 5).
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceManager.TurnNumber">
+            <summary>
+            Gets the current turn number.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.#ctor(CSharpNeedforSpeed.Models.Car,CSharpNeedforSpeed.Models.Track,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.RaceManager"/> class.
+            </summary>
+            <param name="selectedCar">The car selected by the player for the race.</param>
+            <param name="track">The track on which the race will take place.</param>
+            <param name="totalTimeSeconds">The total time in seconds allowed for the race (default: 300).</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="selectedCar"/> or <paramref name="track"/> is null.</exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.StartRace">
+            <summary>
+            Starts the race by setting the state to <see cref="F:CSharpNeedforSpeed.Models.RaceState.InProgress"/>
+            and logging the start event.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.ProcessTurn(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Processes a single turn of the race based on the player's chosen action.
+            Updates fuel, distance, time, and race state accordingly.
+            </summary>
+            <param name="action">The action chosen by the player for this turn.</param>
+            <returns>A <see cref="T:CSharpNeedforSpeed.Models.RaceResult"/> containing the outcome of the turn.</returns>
+            <exception cref="T:System.InvalidOperationException">
+            Thrown when the race has not started, or when a pit stop is attempted
+            while the fuel tank is already at 90% capacity or above.
+            </exception>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.TickOneSecond">
+            <summary>
+            Subtracts one second from the remaining time. Used by the UI timer tick.
+            Updates the race state to OutOfTime if time runs out.
+            </summary>
+            <returns><c>true</c> if the race ended due to time expiring; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.CalculateTimeForAction(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Calculates the time cost in seconds for a given player action.
+            </summary>
+            <param name="action">The player action.</param>
+            <returns>The time cost in seconds.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.UpdateSpeed(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Updates the car's current speed based on the player's action.
+            </summary>
+            <param name="action">The player action taken.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.GenerateEventMessage(CSharpNeedforSpeed.Models.PlayerAction,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Generates a human-readable event message for the event log.
+            </summary>
+            <param name="action">The action taken.</param>
+            <param name="fuelUsed">The fuel consumed.</param>
+            <param name="distanceGained">The distance gained as a lap fraction.</param>
+            <param name="lapCompleted">Whether a lap was completed.</param>
+            <returns>A formatted event message string.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.GetActionVerb(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Gets a human-readable verb for the given player action.
+            </summary>
+            <param name="action">The player action.</param>
+            <returns>A string describing the action.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.AddEventLog(System.String)">
+            <summary>
+            Adds a message to the event log queue, removing the oldest entry if the queue exceeds the max size.
+            </summary>
+            <param name="message">The event message to log.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.StoreLapRecord(System.Double,System.Double,CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Stores a lap record in the lap history.
+            </summary>
+            <param name="fuelUsed">The fuel consumed during the turn.</param>
+            <param name="timeUsed">The time used during the turn.</param>
+            <param name="action">The action taken during the turn.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceManager.CreateResult(System.Boolean,System.String)">
+            <summary>
+            Creates a <see cref="T:CSharpNeedforSpeed.Models.RaceResult"/> from the current game state.
+            </summary>
+            <param name="lapCompleted">Whether a lap was completed this turn.</param>
+            <param name="statusMessage">The status message for this result.</param>
+            <returns>A new <see cref="T:CSharpNeedforSpeed.Models.RaceResult"/> reflecting the current state.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.RaceResult">
+            <summary>
+            Represents the result of processing a single turn in the race.
+            Contains all relevant state information after the turn has been executed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.LapCompleted">
+            <summary>
+            Gets or sets a value indicating whether a lap was completed during this turn.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.CurrentLap">
+            <summary>
+            Gets or sets the current lap number after the turn was processed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.FuelRemaining">
+            <summary>
+            Gets or sets the remaining fuel in litres after the turn was processed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.TimeRemaining">
+            <summary>
+            Gets or sets the remaining time in seconds after the turn was processed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.State">
+            <summary>
+            Gets or sets the current state of the race after the turn was processed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.StatusMessage">
+            <summary>
+            Gets or sets a human-readable status message describing what happened during the turn.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.RaceResult.ProgressBar">
+            <summary>
+            Gets or sets an ASCII progress bar representing the current lap progress.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.RaceResult.#ctor(System.Boolean,System.Int32,System.Double,System.Double,CSharpNeedforSpeed.Models.RaceState,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.RaceResult"/> struct with all fields.
+            </summary>
+            <param name="lapCompleted">Whether a lap was completed this turn.</param>
+            <param name="currentLap">The current lap number.</param>
+            <param name="fuelRemaining">The remaining fuel in litres.</param>
+            <param name="timeRemaining">The remaining time in seconds.</param>
+            <param name="state">The current race state.</param>
+            <param name="statusMessage">A description of what happened.</param>
+            <param name="progressBar">The ASCII progress bar string.</param>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Models.Track">
+            <summary>
+            Represents a racing track in the C# Speed Rush game.
+            Manages lap progression, progress within the current lap,
+            and provides visual progress display.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Track.Name">
+            <summary>
+            Gets the name of the track.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Track.TotalLaps">
+            <summary>
+            Gets the total number of laps required to complete the race.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Track.LapDistance">
+            <summary>
+            Gets the distance of each lap in kilometres.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Track.CurrentLap">
+            <summary>
+            Gets or sets the current lap number (1-based). Starts at 1 and increments
+            each time a full lap is completed.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.Models.Track.LapProgress">
+            <summary>
+            Gets or sets the progress within the current lap as a fraction from 0.0 to 1.0.
+            When this reaches or exceeds 1.0, a lap is completed.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Track.#ctor(System.String,System.Int32,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Models.Track"/> class.
+            </summary>
+            <param name="name">The display name of the track.</param>
+            <param name="totalLaps">The total number of laps for the race (default: 5).</param>
+            <param name="lapDistance">The distance of each lap in kilometres (default: 5.0).</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Track.AdvanceLap(System.Double)">
+            <summary>
+            Advances the track progress by the specified amount. If the progress within
+            the current lap reaches or exceeds 1.0, the current lap is incremented and
+            the excess progress carries over.
+            </summary>
+            <param name="progressGained">The fraction of a lap gained (0.0 to 1.0+).</param>
+            <returns><c>true</c> if a lap was completed during this advance; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Track.IsRaceComplete">
+            <summary>
+            Determines whether the race is complete by checking if all laps have been finished.
+            </summary>
+            <returns><c>true</c> if the current lap exceeds the total number of laps; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Track.GetProgressBar(System.Int32)">
+            <summary>
+            Generates an ASCII progress bar representing the current progress within the active lap.
+            </summary>
+            <param name="width">The total character width of the progress bar (default: 20).</param>
+            <returns>A string like <c>[=====>              ] 25%</c> showing current lap progress.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Models.Track.ToString">
+            <summary>
+            Returns a string representation of the track including its name, lap count, and distance.
+            </summary>
+            <returns>A formatted string describing the track.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Program">
+            <summary>
+            Application entry point for the C# Speed Rush desktop application.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application. Initialises and runs the Avalonia UI framework.
+            </summary>
+            <param name="args">Command-line arguments passed to the application.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Program.BuildAvaloniaApp">
+            <summary>
+            Builds and configures the Avalonia application with the Fluent theme and default font.
+            </summary>
+            <returns>An <see cref="T:Avalonia.AppBuilder"/> configured for the C# Speed Rush application.</returns>
+        </member>
+        <member name="T:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel">
+            <summary>
+            ViewModel for the car selection screen. Allows the player to browse
+            available cars, view their stats, and start a race with the selected car.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.AvailableCars">
+            <summary>
+            Gets the collection of available cars for the player to choose from.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._selectedCar">
+            <summary>
+            Gets or sets the currently selected car. When changed, updates the car details display.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._carDetails">
+            <summary>
+            Gets or sets the formatted multi-line string displaying the selected car's statistics.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._statusMessage">
+            <summary>
+            Gets or sets the error or status message displayed to the user.
+            </summary>
+        </member>
+        <member name="E:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StartRaceRequested">
+            <summary>
+            Event raised when the user wants to start a race with the selected car.
+            The event passes the created <see cref="T:CSharpNeedforSpeed.Models.RaceManager"/> instance.
+            </summary>
+        </member>
+        <member name="E:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.GoBackRequested">
+            <summary>
+            Event raised when the user wants to go back to the main menu.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel"/> class.
+            Populates the available cars with one instance of each car type.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StartRace">
+            <summary>
+            Command that validates the car selection and starts the race.
+            Creates a <see cref="T:CSharpNeedforSpeed.Models.RaceManager"/> with the selected car and a default track.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.GoBack">
+            <summary>
+            Command that navigates back to the main menu.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.SelectedCar">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._selectedCar"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.CarDetails">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._carDetails"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StatusMessage">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel._statusMessage"/>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.OnSelectedCarChanged(CSharpNeedforSpeed.Models.Car)">
+            <summary>
+            Called when the <see cref="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.SelectedCar"/> property changes.
+            Updates the <see cref="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.CarDetails"/> display with the newly selected car's statistics.
+            </summary>
+            <param name="value">The newly selected car.</param>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.startRaceCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StartRaceCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StartRaceCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.StartRace"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.CarSelectionViewModel.GoBack"/>.</summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.ViewModels.MainWindowViewModel">
+            <summary>
+            ViewModel for the main window of the C# Speed Rush application.
+            Provides commands for navigating to the car selection screen and
+            viewing game instructions.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel._showInstructions">
+            <summary>
+            Gets or sets a value indicating whether the instructions overlay is visible.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel._instructionsText">
+            <summary>
+            Gets the game instructions text displayed in the about/instructions overlay.
+            </summary>
+        </member>
+        <member name="E:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.NavigateToCarSelection">
+            <summary>
+            Event raised when the user wants to navigate to the car selection screen.
+            </summary>
+        </member>
+        <member name="E:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.QuitRequested">
+            <summary>
+            Event raised when the user wants to quit the application.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.ViewModels.MainWindowViewModel"/> class.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.StartRace">
+            <summary>
+            Command that navigates to the car selection screen to begin a new race.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.ToggleInstructions">
+            <summary>
+            Command that toggles the visibility of the instructions overlay.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.Quit">
+            <summary>
+            Command that requests the application to quit.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.ShowInstructions">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel._showInstructions"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.InstructionsText">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel._instructionsText"/>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.startRaceCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.StartRaceCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.StartRaceCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.StartRace"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.toggleInstructionsCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.ToggleInstructionsCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.ToggleInstructionsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.ToggleInstructions"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.quitCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.QuitCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.QuitCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.MainWindowViewModel.Quit"/>.</summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel">
+            <summary>
+            ViewModel for the race window. Manages the race state, player actions,
+            and all display properties bound to the race UI including fuel, time,
+            speed, progress, and event logging.
+            </summary>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._raceManager">
+            <summary>
+            The race manager instance controlling the game logic.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._lapDisplay">
+            <summary>
+            Gets the display string for the current lap (e.g., "Lap 2 / 5").
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._fuelLevel">
+            <summary>
+            Gets the fuel level as a value from 0 to 100 for binding to a ProgressBar.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._fuelPercentage">
+            <summary>
+            Gets the fuel percentage as a formatted string for display labels.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._timeRemaining">
+            <summary>
+            Gets the raw remaining time in seconds.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._timePercentage">
+            <summary>
+            Gets the remaining time as a percentage (0–100) for binding to a ProgressBar.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._speedStatus">
+            <summary>
+            Gets the current speed status display string.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._progressBarDisplay">
+            <summary>
+            Gets the ASCII progress bar display showing lap progress.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._eventLogDisplay">
+            <summary>
+            Gets the event log display string (last 5 events joined by newlines).
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._statusMessage">
+            <summary>
+            Gets the status message shown to the player (coloured based on race state).
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._actionsEnabled">
+            <summary>
+            Gets a value indicating whether player action buttons are enabled.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._speedUpEnabled">
+            <summary>
+            Gets a value indicating whether the Speed Up button is enabled.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._maintainEnabled">
+            <summary>
+            Gets a value indicating whether the Maintain Speed button is enabled.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._pitStopEnabled">
+            <summary>
+            Gets a value indicating whether the Pit Stop button is enabled.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._isRaceOver">
+            <summary>
+            Gets a value indicating whether the race has ended (for UI state changes).
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._raceSummary">
+            <summary>
+            Gets the race summary text displayed when the race ends.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._isPositiveStatus">
+            <summary>
+            Gets a value indicating whether the status message represents a positive outcome.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._carName">
+            <summary>
+            Gets the name of the car being raced, for display in the UI header.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._trackName">
+            <summary>
+            Gets the name of the track, for display in the UI header.
+            </summary>
+        </member>
+        <member name="E:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ReturnToMenuRequested">
+            <summary>
+            Event raised when the player wants to return to the main menu.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.#ctor(CSharpNeedforSpeed.Models.RaceManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel"/> class
+            with the specified race manager.
+            </summary>
+            <param name="raceManager">The race manager controlling the game logic.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedUp">
+            <summary>
+            Command that processes a Speed Up action for the current turn.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.MaintainSpeed">
+            <summary>
+            Command that processes a Maintain Speed action for the current turn.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.PitStop">
+            <summary>
+            Command that processes a Pit Stop action for the current turn.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ReturnToMenu">
+            <summary>
+            Command that returns to the main menu.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ProcessAction(CSharpNeedforSpeed.Models.PlayerAction)">
+            <summary>
+            Processes a player action by calling the race manager and updating all UI properties.
+            Catches exceptions and displays user-friendly error messages.
+            </summary>
+            <param name="action">The player action to process.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.HandleRaceEnd(CSharpNeedforSpeed.Models.RaceResult)">
+            <summary>
+            Handles the end of the race by generating a summary and disabling actions.
+            </summary>
+            <param name="result">The final race result.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.OnTimerTick">
+            <summary>
+            Called by an external timer tick (once per second) to update the countdown.
+            </summary>
+            <returns><c>true</c> if the race ended due to time expiring; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.UpdateAllProperties">
+            <summary>
+            Updates all bindable properties to reflect the current race manager state.
+            </summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.LapDisplay">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._lapDisplay"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.FuelLevel">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._fuelLevel"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.FuelPercentage">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._fuelPercentage"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.TimeRemaining">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._timeRemaining"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.TimePercentage">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._timePercentage"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedStatus">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._speedStatus"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ProgressBarDisplay">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._progressBarDisplay"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.EventLogDisplay">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._eventLogDisplay"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.StatusMessage">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._statusMessage"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ActionsEnabled">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._actionsEnabled"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedUpEnabled">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._speedUpEnabled"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.MaintainEnabled">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._maintainEnabled"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.PitStopEnabled">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._pitStopEnabled"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.IsRaceOver">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._isRaceOver"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.RaceSummary">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._raceSummary"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.IsPositiveStatus">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._isPositiveStatus"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.CarName">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._carName"/>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.TrackName">
+            <inheritdoc cref="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel._trackName"/>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.speedUpCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedUpCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedUpCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.SpeedUp"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.maintainSpeedCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.MaintainSpeedCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.MaintainSpeedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.MaintainSpeed"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.pitStopCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.PitStopCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.PitStopCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.PitStop"/>.</summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.returnToMenuCommand">
+            <summary>The backing field for <see cref="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ReturnToMenuCommand"/>.</summary>
+        </member>
+        <member name="P:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ReturnToMenuCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:CSharpNeedforSpeed.ViewModels.RaceWindowViewModel.ReturnToMenu"/>.</summary>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Views.CarSelectionWindow">
+            <summary>
+            Code-behind for the car selection window.
+            Handles navigation events for starting a race or going back to the main menu.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Views.CarSelectionWindow._viewModel">
+            <summary>
+            The ViewModel instance for this window.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.CarSelectionWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Views.CarSelectionWindow"/> class.
+            Sets up the DataContext and subscribes to navigation events.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.CarSelectionWindow.OnStartRaceRequested(CSharpNeedforSpeed.Models.RaceManager)">
+            <summary>
+            Handles the start race event by opening the race window with the provided race manager.
+            </summary>
+            <param name="raceManager">The configured race manager for the new race.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.CarSelectionWindow.OnGoBackRequested">
+            <summary>
+            Handles the go back event by closing this window (returns to main menu).
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.CarSelectionWindow.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Views.MainWindow">
+            <summary>
+            Code-behind for the main window of the C# Speed Rush application.
+            Handles navigation events from the ViewModel to open child windows.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Views.MainWindow._viewModel">
+            <summary>
+            The ViewModel instance for this window.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.MainWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Views.MainWindow"/> class.
+            Sets up the DataContext and subscribes to navigation events.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.MainWindow.OnNavigateToCarSelection">
+            <summary>
+            Handles navigation to the car selection screen by hiding the main window
+            and opening the car selection window.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.MainWindow.OnQuitRequested">
+            <summary>
+            Handles the quit request by closing the main window and exiting the application.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.MainWindow.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Views.RaceWindow">
+            <summary>
+            Code-behind for the race window. Manages the race timer and navigation events.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Views.RaceWindow._viewModel">
+            <summary>
+            The ViewModel instance for this window.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Views.RaceWindow._timer">
+            <summary>
+            Timer that ticks every second to count down the remaining race time.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.RaceWindow.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Views.RaceWindow"/> class.
+            Required by Avalonia AXAML loader. Use the overload with RaceManager for actual gameplay.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.RaceWindow.#ctor(CSharpNeedforSpeed.Models.RaceManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CSharpNeedforSpeed.Views.RaceWindow"/> class
+            with the specified race manager.
+            </summary>
+            <param name="raceManager">The race manager controlling the game logic.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.RaceWindow.OnTimerTick(System.Object,System.EventArgs)">
+            <summary>
+            Handles the timer tick event by updating the ViewModel countdown.
+            Stops the timer if the race has ended.
+            </summary>
+            <param name="sender">The event sender.</param>
+            <param name="e">The event arguments.</param>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.RaceWindow.OnReturnToMenu">
+            <summary>
+            Handles the return to menu event by stopping the timer and closing the window.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.RaceWindow.InitializeComponent(System.Boolean)">
+            <summary>
+            Wires up the controls and optionally loads XAML markup and attaches dev tools (if Avalonia.Diagnostics package is referenced).
+            </summary>
+            <param name="loadXaml">Should the XAML be loaded into the component.</param>
+        </member>
+        <member name="T:CSharpNeedforSpeed.Views.BoolToColorConverter">
+            <summary>
+            Converts a boolean value to a colour brush for status message display.
+            True (positive) maps to cyan/blue; false (negative) maps to red.
+            </summary>
+        </member>
+        <member name="F:CSharpNeedforSpeed.Views.BoolToColorConverter.Instance">
+            <summary>
+            Singleton instance of the converter for use in AXAML bindings.
+            </summary>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.BoolToColorConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a boolean to a <see cref="T:Avalonia.Media.SolidColorBrush"/>.
+            </summary>
+            <param name="value">The boolean value to convert.</param>
+            <param name="targetType">The target type (ignored).</param>
+            <param name="parameter">An optional parameter (ignored).</param>
+            <param name="culture">The culture info (ignored).</param>
+            <returns>A green brush for true, red brush for false.</returns>
+        </member>
+        <member name="M:CSharpNeedforSpeed.Views.BoolToColorConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Not implemented. One-way binding only.
+            </summary>
+            <param name="value">The value to convert back.</param>
+            <param name="targetType">The target type.</param>
+            <param name="parameter">An optional parameter.</param>
+            <param name="culture">The culture info.</param>
+            <returns>Not supported.</returns>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedCar">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedCar" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CarDetails">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CarDetails" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowInstructions">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowInstructions" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InstructionsText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InstructionsText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LapDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LapDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FuelLevel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FuelLevel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FuelPercentage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FuelPercentage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TimeRemaining">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TimeRemaining" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TimePercentage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TimePercentage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SpeedStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SpeedStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProgressBarDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProgressBarDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EventLogDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EventLogDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActionsEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActionsEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SpeedUpEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SpeedUpEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.MaintainEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "MaintainEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PitStopEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PitStopEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRaceOver">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRaceOver" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RaceSummary">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RaceSummary" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPositiveStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPositiveStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CarName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CarName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TrackName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TrackName" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedCar">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedCar" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CarDetails">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CarDetails" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowInstructions">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowInstructions" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InstructionsText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InstructionsText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LapDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LapDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FuelLevel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FuelLevel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FuelPercentage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FuelPercentage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TimeRemaining">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TimeRemaining" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TimePercentage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TimePercentage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SpeedStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SpeedStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProgressBarDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProgressBarDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EventLogDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EventLogDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActionsEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActionsEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SpeedUpEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SpeedUpEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.MaintainEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "MaintainEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PitStopEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PitStopEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRaceOver">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRaceOver" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RaceSummary">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RaceSummary" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPositiveStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPositiveStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CarName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CarName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TrackName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TrackName" generated properties.</summary>
+        </member>
+    </members>
+</doc>
