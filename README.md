@@ -1,10 +1,10 @@
-# C# Speed Rush
+# C# Need For Speed
 
 A turn-based, time-focused racing simulation game built with Avalonia UI and .NET.
 
 ## Game Description
 
-C# Speed Rush puts you behind the wheel in a strategic turn-based racing game. Select from three unique cars — each with their own speed, fuel efficiency, and pit stop characteristics — then race across 5 laps on the Speed Rush Circuit. Every turn, you must decide: push for speed, maintain your pace, or make a pit stop to refuel. Balance aggression with fuel management to cross the finish line before time runs out.
+C# Need For Speed puts you behind the wheel in a strategic turn-based racing game. Select from three unique cars — each with their own speed, fuel efficiency, and pit stop characteristics — then race across 5 laps on the Need For Speed Circuit. Every turn, you must decide: push for speed, maintain your pace, or make a pit stop to refuel. Balance aggression with fuel management to cross the finish line before time runs out.
 
 ## Features
 
