@@ -1,0 +1,111 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CSharpNeedforSpeed.ViewModels"
+        x:Class="CSharpNeedforSpeed.Views.MainWindow"
+        Title="C# Need for Speed"
+        Width="600" Height="400"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="#0f172a">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <!-- Main Content -->
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="15">
+
+            <!-- Game Title -->
+            <TextBlock Text="C# NEED FOR SPEED"
+                       FontSize="42"
+                       FontWeight="Bold"
+                       Foreground="#3b82f6"
+                       HorizontalAlignment="Center" />
+
+            <!-- Tagline -->
+            <TextBlock Text="A Turn-Based Racing Simulation"
+                       FontSize="16"
+                       Foreground="#94a3b8"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20" />
+
+            <!-- Start Race Button -->
+            <Button Content="Start Race"
+                    Command="{Binding StartRaceCommand}"
+                    HorizontalAlignment="Center"
+                    Width="200"
+                    Height="45"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Background="#2563eb"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+
+            <!-- Instructions Button -->
+            <Button Content="How to Play"
+                    Command="{Binding ToggleInstructionsCommand}"
+                    HorizontalAlignment="Center"
+                    Width="200"
+                    Height="40"
+                    FontSize="14"
+                    Background="#1e293b"
+                    Foreground="#94a3b8"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+
+            <!-- Quit Button -->
+            <Button Content="Quit"
+                    Command="{Binding QuitCommand}"
+                    HorizontalAlignment="Center"
+                    Width="200"
+                    Height="40"
+                    FontSize="14"
+                    Background="#1e40af"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+        </StackPanel>
+
+        <!-- Instructions Overlay -->
+        <Border Background="#DD000000"
+                IsVisible="{Binding ShowInstructions}"
+                CornerRadius="0">
+            <Border Background="#1e293b"
+                    CornerRadius="12"
+                    Padding="30"
+                    MaxWidth="480"
+                    MaxHeight="350"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#3b82f6"
+                    BorderThickness="2">
+                <StackPanel Spacing="15">
+                    <ScrollViewer MaxHeight="240">
+                        <TextBlock Text="{Binding InstructionsText}"
+                                   FontSize="13"
+                                   Foreground="#cbd5e1"
+                                   TextWrapping="Wrap"
+                                   FontFamily="Consolas,Courier New,monospace" />
+                    </ScrollViewer>
+                    <Button Content="Close"
+                            Command="{Binding ToggleInstructionsCommand}"
+                            HorizontalAlignment="Center"
+                            Width="120"
+                            Height="35"
+                            Background="#2563eb"
+                            Foreground="White"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CornerRadius="6" />
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

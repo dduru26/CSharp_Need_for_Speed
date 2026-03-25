@@ -1,0 +1,251 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CSharpNeedforSpeed.ViewModels"
+        xmlns:local="using:CSharpNeedforSpeed.Views"
+        x:Class="CSharpNeedforSpeed.Views.RaceWindow"
+        Title="C# Need for Speed - Race!"
+        Width="800" Height="600"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="#0f172a">
+
+    <Window.Resources>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter" />
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header: Lap Display and Car/Track Info -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="{Binding LapDisplay}"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="#3b82f6" />
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right">
+                <TextBlock Text="{Binding CarName}"
+                           FontSize="13"
+                           Foreground="#94a3b8"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding TrackName}"
+                           FontSize="12"
+                           Foreground="#64748b"
+                           HorizontalAlignment="Right" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Fuel Bar -->
+        <Grid Grid.Row="1" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="FUEL"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       Foreground="#22d3ee"
+                       VerticalAlignment="Center" />
+            <ProgressBar Grid.Column="1"
+                         Value="{Binding FuelLevel}"
+                         Minimum="0"
+                         Maximum="100"
+                         Height="22"
+                         Foreground="#22d3ee"
+                         Background="#1e293b"
+                         CornerRadius="4" />
+            <TextBlock Grid.Column="2"
+                       FontSize="13"
+                       Foreground="#22d3ee"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right">
+                <TextBlock.Text>
+                    <Binding Path="FuelPercentage" StringFormat="{}{0:F0}%" />
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
+
+        <!-- Time Bar -->
+        <Grid Grid.Row="2" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="TIME"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       Foreground="#a78bfa"
+                       VerticalAlignment="Center" />
+            <ProgressBar Grid.Column="1"
+                         Value="{Binding TimePercentage}"
+                         Minimum="0"
+                         Maximum="100"
+                         Height="22"
+                         Foreground="#a78bfa"
+                         Background="#1e293b"
+                         CornerRadius="4" />
+            <TextBlock Grid.Column="2"
+                       FontSize="13"
+                       Foreground="#a78bfa"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right">
+                <TextBlock.Text>
+                    <Binding Path="TimeRemaining" StringFormat="{}{0:F0}s" />
+                </TextBlock.Text>
+            </TextBlock>
+        </Grid>
+
+        <!-- Speed Status and Progress Bar -->
+        <StackPanel Grid.Row="3" Spacing="8" Margin="0,10,0,5">
+            <TextBlock Text="{Binding SpeedStatus}"
+                       FontSize="15"
+                       Foreground="#60a5fa"
+                       FontWeight="SemiBold" />
+
+            <!-- ASCII Progress Bar -->
+            <Border Background="#020617"
+                    CornerRadius="6"
+                    Padding="15,10">
+                <TextBlock Text="{Binding ProgressBarDisplay}"
+                           FontSize="18"
+                           Foreground="#38bdf8"
+                           FontFamily="Consolas,Courier New,monospace"
+                           HorizontalAlignment="Center" />
+            </Border>
+        </StackPanel>
+
+        <!-- Event Log -->
+        <Border Grid.Row="4"
+                Background="#020617"
+                CornerRadius="8"
+                Padding="15"
+                Margin="0,8">
+            <ScrollViewer>
+                <TextBlock Text="{Binding EventLogDisplay}"
+                           FontSize="12"
+                           Foreground="#7dd3fc"
+                           FontFamily="Consolas,Courier New,monospace"
+                           LineHeight="20"
+                           TextWrapping="Wrap" />
+            </ScrollViewer>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="15"
+                    Margin="0,8">
+            <Button Content="Speed Up"
+                    Command="{Binding SpeedUpCommand}"
+                    IsEnabled="{Binding SpeedUpEnabled}"
+                    Width="180"
+                    Height="50"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Background="#2563eb"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+            <Button Content="Maintain Speed"
+                    Command="{Binding MaintainSpeedCommand}"
+                    IsEnabled="{Binding MaintainEnabled}"
+                    Width="180"
+                    Height="50"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Background="#7c3aed"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+            <Button Content="Pit Stop"
+                    Command="{Binding PitStopCommand}"
+                    IsEnabled="{Binding PitStopEnabled}"
+                    Width="180"
+                    Height="50"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Background="#0891b2"
+                    Foreground="White"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    CornerRadius="8" />
+        </StackPanel>
+
+        <!-- Status Message -->
+        <TextBlock Grid.Row="6"
+                   Text="{Binding StatusMessage}"
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"
+                   Margin="0,5">
+            <TextBlock.Foreground>
+                <Binding Path="IsPositiveStatus"
+                         Converter="{StaticResource BoolToColorConverter}" />
+            </TextBlock.Foreground>
+        </TextBlock>
+
+        <!-- Race Over Overlay -->
+        <Border Grid.Row="0" Grid.RowSpan="8"
+                Background="#DD000000"
+                IsVisible="{Binding IsRaceOver}"
+                CornerRadius="0">
+            <Border Background="#1e293b"
+                    CornerRadius="12"
+                    Padding="30"
+                    MaxWidth="420"
+                    MaxHeight="320"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="#3b82f6"
+                    BorderThickness="2">
+                <StackPanel Spacing="15">
+                    <TextBlock Text="RACE RESULTS"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#3b82f6"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding RaceSummary}"
+                               FontSize="13"
+                               Foreground="#cbd5e1"
+                               TextWrapping="Wrap"
+                               FontFamily="Consolas,Courier New,monospace"
+                               LineHeight="20" />
+                    <Button Content="Return to Menu"
+                            Command="{Binding ReturnToMenuCommand}"
+                            HorizontalAlignment="Center"
+                            Width="160"
+                            Height="40"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Background="#2563eb"
+                            Foreground="White"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CornerRadius="8" />
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</Window>
