@@ -4,248 +4,392 @@
         xmlns:local="using:CSharpNeedforSpeed.Views"
         x:Class="CSharpNeedforSpeed.Views.RaceWindow"
         Title="C# Need for Speed - Race!"
-        Width="800" Height="600"
+        Width="1000" Height="700"
         CanResize="False"
         WindowStartupLocation="CenterScreen"
-        Background="#0f172a">
+        Background="#080e18"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
 
     <Window.Resources>
         <local:BoolToColorConverter x:Key="BoolToColorConverter" />
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="40,*,Auto">
 
-        <!-- Header: Lap Display and Car/Track Info -->
-        <Grid Grid.Row="0" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                       Text="{Binding LapDisplay}"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="#3b82f6" />
-            <StackPanel Grid.Column="1"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right">
-                <TextBlock Text="{Binding CarName}"
+        <!-- Custom Title Bar -->
+        <Border Grid.Row="0" Background="#080e18" Padding="12,0">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <TextBlock Grid.Column="0"
+                           Text="RACE_SIM_UTILITY_V1"
                            FontSize="13"
-                           Foreground="#94a3b8"
-                           HorizontalAlignment="Right" />
-                <TextBlock Text="{Binding TrackName}"
-                           FontSize="12"
-                           Foreground="#64748b"
-                           HorizontalAlignment="Right" />
-            </StackPanel>
-        </Grid>
-
-        <!-- Fuel Bar -->
-        <Grid Grid.Row="1" Margin="0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="60" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                       Text="FUEL"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       Foreground="#22d3ee"
-                       VerticalAlignment="Center" />
-            <ProgressBar Grid.Column="1"
-                         Value="{Binding FuelLevel}"
-                         Minimum="0"
-                         Maximum="100"
-                         Height="22"
-                         Foreground="#22d3ee"
-                         Background="#1e293b"
-                         CornerRadius="4" />
-            <TextBlock Grid.Column="2"
-                       FontSize="13"
-                       Foreground="#22d3ee"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Right">
-                <TextBlock.Text>
-                    <Binding Path="FuelPercentage" StringFormat="{}{0:F0}%" />
-                </TextBlock.Text>
-            </TextBlock>
-        </Grid>
-
-        <!-- Time Bar -->
-        <Grid Grid.Row="2" Margin="0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="60" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                       Text="TIME"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       Foreground="#a78bfa"
-                       VerticalAlignment="Center" />
-            <ProgressBar Grid.Column="1"
-                         Value="{Binding TimePercentage}"
-                         Minimum="0"
-                         Maximum="100"
-                         Height="22"
-                         Foreground="#a78bfa"
-                         Background="#1e293b"
-                         CornerRadius="4" />
-            <TextBlock Grid.Column="2"
-                       FontSize="13"
-                       Foreground="#a78bfa"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Right">
-                <TextBlock.Text>
-                    <Binding Path="TimeRemaining" StringFormat="{}{0:F0}s" />
-                </TextBlock.Text>
-            </TextBlock>
-        </Grid>
-
-        <!-- Speed Status and Progress Bar -->
-        <StackPanel Grid.Row="3" Spacing="8" Margin="0,10,0,5">
-            <TextBlock Text="{Binding SpeedStatus}"
-                       FontSize="15"
-                       Foreground="#60a5fa"
-                       FontWeight="SemiBold" />
-
-            <!-- ASCII Progress Bar -->
-            <Border Background="#020617"
-                    CornerRadius="6"
-                    Padding="15,10">
-                <TextBlock Text="{Binding ProgressBarDisplay}"
-                           FontSize="18"
-                           Foreground="#38bdf8"
-                           FontFamily="Consolas,Courier New,monospace"
-                           HorizontalAlignment="Center" />
-            </Border>
-        </StackPanel>
-
-        <!-- Event Log -->
-        <Border Grid.Row="4"
-                Background="#020617"
-                CornerRadius="8"
-                Padding="15"
-                Margin="0,8">
-            <ScrollViewer>
-                <TextBlock Text="{Binding EventLogDisplay}"
-                           FontSize="12"
-                           Foreground="#7dd3fc"
-                           FontFamily="Consolas,Courier New,monospace"
-                           LineHeight="20"
-                           TextWrapping="Wrap" />
-            </ScrollViewer>
+                           FontWeight="Black"
+                           Foreground="#e9eefd"
+                           VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20"
+                            Margin="20,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="DASHBOARD"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="#84adff" />
+                    <TextBlock Text="TELEMETRY"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="#e9eefd"
+                               Opacity="0.4" />
+                    <TextBlock Text="VEHICLE SETUP"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               Foreground="#e9eefd"
+                               Opacity="0.4" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <Button Content="_" Width="28" Height="24"
+                            FontSize="12" Background="Transparent" Foreground="#84adff"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CornerRadius="2" />
+                    <Button Content="[ ]" Width="28" Height="24"
+                            FontSize="9" Background="Transparent" Foreground="#84adff"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CornerRadius="2" />
+                    <Button Content="X" Width="28" Height="24"
+                            FontSize="11" Background="Transparent" Foreground="#84adff"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" CornerRadius="2" />
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <!-- Action Buttons -->
-        <StackPanel Grid.Row="5"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    Spacing="15"
-                    Margin="0,8">
-            <Button Content="Speed Up"
-                    Command="{Binding SpeedUpCommand}"
-                    IsEnabled="{Binding SpeedUpEnabled}"
-                    Width="180"
-                    Height="50"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Background="#2563eb"
-                    Foreground="White"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
-            <Button Content="Maintain Speed"
-                    Command="{Binding MaintainSpeedCommand}"
-                    IsEnabled="{Binding MaintainEnabled}"
-                    Width="180"
-                    Height="50"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Background="#7c3aed"
-                    Foreground="White"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
-            <Button Content="Pit Stop"
-                    Command="{Binding PitStopCommand}"
-                    IsEnabled="{Binding PitStopEnabled}"
-                    Width="180"
-                    Height="50"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Background="#0891b2"
-                    Foreground="White"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
-        </StackPanel>
+        <!-- Main Race Content -->
+        <Grid Grid.Row="1" Margin="24,0,24,0" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
 
-        <!-- Status Message -->
-        <TextBlock Grid.Row="6"
-                   Text="{Binding StatusMessage}"
-                   FontSize="14"
-                   FontWeight="SemiBold"
-                   HorizontalAlignment="Center"
-                   Margin="0,5">
-            <TextBlock.Foreground>
-                <Binding Path="IsPositiveStatus"
-                         Converter="{StaticResource BoolToColorConverter}" />
-            </TextBlock.Foreground>
-        </TextBlock>
+            <!-- Header: Lap Counter -->
+            <Grid Grid.Row="0" Margin="0,20,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="SESSION ACTIVE"
+                               FontSize="10"
+                               FontWeight="Medium"
+                               Foreground="#a5abb9"
+                               Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding LapDisplay}"
+                               FontSize="42"
+                               FontWeight="Bold"
+                               Foreground="#e9eefd" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <TextBlock Text="TRACK STATUS"
+                               FontSize="10"
+                               FontWeight="Medium"
+                               Foreground="#a5abb9"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding SpeedStatus}"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#81ecff"
+                               HorizontalAlignment="Right" />
+                </StackPanel>
+
+                <!-- Separator -->
+                <Border Grid.ColumnSpan="2"
+                        Height="1"
+                        Background="#424854"
+                        Opacity="0.2"
+                        VerticalAlignment="Bottom" />
+            </Grid>
+
+            <!-- Gauges: Fuel and Time -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,30,*" Margin="0,8,0,20">
+                <!-- Fuel Gauge -->
+                <StackPanel Grid.Column="0" Spacing="8">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <TextBlock Grid.Column="0"
+                                   Text="FUEL"
+                                   FontSize="13"
+                                   FontWeight="Bold"
+                                   Foreground="#e9eefd"
+                                   VerticalAlignment="Bottom" />
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="6">
+                            <TextBlock FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#81ecff"
+                                       VerticalAlignment="Bottom">
+                                <TextBlock.Text>
+                                    <Binding Path="FuelPercentage" StringFormat="{}{0:F0}%" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock FontSize="11"
+                                       Foreground="#a5abb9"
+                                       VerticalAlignment="Bottom"
+                                       Margin="0,0,0,2">
+                                <TextBlock.Text>
+                                    <Binding Path="FuelLevel" StringFormat="{}{0:F1}L" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <!-- Fuel Progress Bar -->
+                    <Grid Height="12">
+                        <Border Background="#1e2635" CornerRadius="0" />
+                        <ProgressBar Value="{Binding FuelLevel}"
+                                     Minimum="0" Maximum="100"
+                                     Height="12"
+                                     Foreground="#81ecff"
+                                     Background="#1e2635"
+                                     CornerRadius="0" />
+                    </Grid>
+                </StackPanel>
+
+                <!-- Time Gauge -->
+                <StackPanel Grid.Column="2" Spacing="8">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <TextBlock Grid.Column="0"
+                                   Text="RACE TIME"
+                                   FontSize="13"
+                                   FontWeight="Bold"
+                                   Foreground="#e9eefd"
+                                   VerticalAlignment="Bottom" />
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="6">
+                            <TextBlock FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#dae3f7"
+                                       VerticalAlignment="Bottom">
+                                <TextBlock.Text>
+                                    <Binding Path="TimePercentage" StringFormat="{}{0:F0}%" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock FontSize="11"
+                                       Foreground="#a5abb9"
+                                       VerticalAlignment="Bottom"
+                                       Margin="0,0,0,2">
+                                <TextBlock.Text>
+                                    <Binding Path="TimeRemaining" StringFormat="{}{0:F0}s" />
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <!-- Time Progress Bar -->
+                    <Grid Height="12">
+                        <Border Background="#1e2635" CornerRadius="0" />
+                        <ProgressBar Value="{Binding TimePercentage}"
+                                     Minimum="0" Maximum="100"
+                                     Height="12"
+                                     Foreground="#dae3f7"
+                                     Background="#1e2635"
+                                     CornerRadius="0" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- Course Position (ASCII Progress) -->
+            <Border Grid.Row="2" Background="#131a26" Padding="16,12"
+                    Margin="0,0,0,12">
+                <Border BorderBrush="#84adff" BorderThickness="3,0,0,0" Padding="12,4,0,4">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="COURSE POSITION"
+                                   FontSize="10"
+                                   FontWeight="Medium"
+                                   Foreground="#a5abb9" />
+                        <TextBlock Text="{Binding ProgressBarDisplay}"
+                                   FontSize="18"
+                                   Foreground="#84adff"
+                                   FontFamily="Consolas,Courier New,monospace"
+                                   FontWeight="Bold" />
+                    </StackPanel>
+                </Border>
+            </Border>
+
+            <!-- Car Info Bar -->
+            <Grid Grid.Row="3" Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Text="{Binding CarName}"
+                           FontSize="11"
+                           FontWeight="Bold"
+                           Foreground="#a5abb9"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"
+                           Text="{Binding TrackName}"
+                           FontSize="11"
+                           Foreground="#707582"
+                           VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- Event Log -->
+            <Border Grid.Row="4"
+                    Background="#0d141f"
+                    Margin="0,4,0,0">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Log Header -->
+                    <Border Grid.Row="0" Background="#131a26" Padding="16,8">
+                        <TextBlock Text="LIVE ACTION LOG"
+                                   FontSize="10"
+                                   FontWeight="Medium"
+                                   Foreground="#a5abb9" />
+                    </Border>
+                    <!-- Log Content -->
+                    <ScrollViewer Grid.Row="1" Padding="16,12">
+                        <TextBlock Text="{Binding EventLogDisplay}"
+                                   FontSize="13"
+                                   Foreground="#5091ff"
+                                   FontFamily="Consolas,Courier New,monospace"
+                                   LineHeight="24"
+                                   TextWrapping="Wrap" />
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Action Buttons -->
+            <Grid Grid.Row="5" ColumnDefinitions="*,12,*,12,*" Margin="0,16,0,0">
+                <!-- Speed Up -->
+                <Button Grid.Column="0"
+                        Command="{Binding SpeedUpCommand}"
+                        IsEnabled="{Binding SpeedUpEnabled}"
+                        HorizontalAlignment="Stretch"
+                        Height="56"
+                        Background="#6c9fff"
+                        Foreground="#000000"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="4">
+                    <TextBlock Text="SPEED UP"
+                               FontSize="14"
+                               FontWeight="Bold" />
+                </Button>
+
+                <!-- Maintain -->
+                <Button Grid.Column="2"
+                        Command="{Binding MaintainSpeedCommand}"
+                        IsEnabled="{Binding MaintainEnabled}"
+                        HorizontalAlignment="Stretch"
+                        Height="56"
+                        Background="#3e4758"
+                        Foreground="#e9eefd"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="4">
+                    <TextBlock Text="MAINTAIN"
+                               FontSize="14"
+                               FontWeight="Bold" />
+                </Button>
+
+                <!-- Pit Stop -->
+                <Button Grid.Column="4"
+                        Command="{Binding PitStopCommand}"
+                        IsEnabled="{Binding PitStopEnabled}"
+                        HorizontalAlignment="Stretch"
+                        Height="56"
+                        Background="#9f0519"
+                        Foreground="#e9eefd"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="4">
+                    <TextBlock Text="PIT STOP"
+                               FontSize="14"
+                               FontWeight="Bold" />
+                </Button>
+            </Grid>
+        </Grid>
+
+        <!-- Status Footer Bar -->
+        <Border Grid.Row="2" Background="#131a26" Padding="24,8" Height="32">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Border Width="8" Height="8" CornerRadius="4" Background="#81ecff" />
+                    <TextBlock Text="{Binding StatusMessage}"
+                               FontSize="11"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center">
+                        <TextBlock.Foreground>
+                            <Binding Path="IsPositiveStatus"
+                                     Converter="{StaticResource BoolToColorConverter}" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                    <TextBlock Text="LATENCY: 14ms"
+                               FontSize="10"
+                               Foreground="#a5abb9"
+                               FontFamily="Consolas,Courier New,monospace" />
+                    <TextBlock Text="CPU: 4%"
+                               FontSize="10"
+                               Foreground="#a5abb9"
+                               FontFamily="Consolas,Courier New,monospace" />
+                </StackPanel>
+            </Grid>
+        </Border>
 
         <!-- Race Over Overlay -->
-        <Border Grid.Row="0" Grid.RowSpan="8"
-                Background="#DD000000"
-                IsVisible="{Binding IsRaceOver}"
-                CornerRadius="0">
-            <Border Background="#1e293b"
-                    CornerRadius="12"
-                    Padding="30"
-                    MaxWidth="420"
-                    MaxHeight="320"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    BorderBrush="#3b82f6"
-                    BorderThickness="2">
-                <StackPanel Spacing="15">
-                    <TextBlock Text="RACE RESULTS"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="#3b82f6"
-                               HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding RaceSummary}"
-                               FontSize="13"
-                               Foreground="#cbd5e1"
-                               TextWrapping="Wrap"
-                               FontFamily="Consolas,Courier New,monospace"
-                               LineHeight="20" />
-                    <Button Content="Return to Menu"
-                            Command="{Binding ReturnToMenuCommand}"
-                            HorizontalAlignment="Center"
-                            Width="160"
-                            Height="40"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Background="#2563eb"
-                            Foreground="White"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            CornerRadius="8" />
-                </StackPanel>
-            </Border>
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                Background="#E6080e18"
+                IsVisible="{Binding IsRaceOver}">
+            <Grid HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Width="700">
+                <Border Background="#131a26"
+                        Padding="40"
+                        CornerRadius="2">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                        <!-- Outcome Header -->
+                        <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,24">
+                            <TextBlock Text="SEQUENCE_COMPLETED"
+                                       FontSize="11"
+                                       FontWeight="Bold"
+                                       Foreground="#84adff" />
+                            <TextBlock Text="RACE RESULTS"
+                                       FontSize="48"
+                                       FontWeight="Black"
+                                       Foreground="#e9eefd" />
+                        </StackPanel>
+
+                        <!-- Race Summary -->
+                        <Border Grid.Row="1"
+                                Background="#18202d"
+                                Padding="24"
+                                Margin="0,0,0,20">
+                            <TextBlock Text="{Binding RaceSummary}"
+                                       FontSize="14"
+                                       Foreground="#a5abb9"
+                                       TextWrapping="Wrap"
+                                       FontFamily="Consolas,Courier New,monospace"
+                                       LineHeight="24" />
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <Grid Grid.Row="2" ColumnDefinitions="*,12,*">
+                            <Button Grid.Column="0"
+                                    Content="RETRY RACE"
+                                    Command="{Binding ReturnToMenuCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    Height="52"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Background="#6c9fff"
+                                    Foreground="#000000"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    CornerRadius="4" />
+                            <Button Grid.Column="2"
+                                    Content="BACK TO MENU"
+                                    Command="{Binding ReturnToMenuCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    Height="52"
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Background="#3e4758"
+                                    Foreground="#e9eefd"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    CornerRadius="4" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </Window>

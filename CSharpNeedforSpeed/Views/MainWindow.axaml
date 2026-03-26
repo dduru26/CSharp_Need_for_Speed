@@ -3,108 +3,234 @@
         xmlns:vm="using:CSharpNeedforSpeed.ViewModels"
         x:Class="CSharpNeedforSpeed.Views.MainWindow"
         Title="C# Need for Speed"
-        Width="600" Height="400"
+        Width="900" Height="650"
         CanResize="False"
         WindowStartupLocation="CenterScreen"
-        Background="#0f172a">
+        Background="#080e18"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <Grid RowDefinitions="40,*,Auto">
+
+        <!-- Custom Title Bar -->
+        <Border Grid.Row="0" Background="#080e18" Padding="12,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           Text="RACE_SIM_UTILITY_V1"
+                           FontSize="13"
+                           FontWeight="Black"
+                           Foreground="#e9eefd"
+                           VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                    <Button Content="_" Width="32" Height="28"
+                            FontSize="14" FontWeight="Bold"
+                            Background="Transparent" Foreground="#e9eefd"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                            CornerRadius="2" />
+                    <Button Content="[ ]" Width="32" Height="28"
+                            FontSize="10" FontWeight="Bold"
+                            Background="Transparent" Foreground="#e9eefd"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                            CornerRadius="2" />
+                    <Button Content="X"
+                            Command="{Binding QuitCommand}"
+                            Width="32" Height="28"
+                            FontSize="12" FontWeight="Bold"
+                            Background="Transparent" Foreground="#e9eefd"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                            CornerRadius="2" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
         <!-- Main Content -->
-        <StackPanel VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Spacing="15">
+        <Grid Grid.Row="1">
+            <!-- Centered Branding -->
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Spacing="6">
 
-            <!-- Game Title -->
-            <TextBlock Text="C# NEED FOR SPEED"
-                       FontSize="42"
-                       FontWeight="Bold"
-                       Foreground="#3b82f6"
-                       HorizontalAlignment="Center" />
+                <!-- System Initialized Tag -->
+                <TextBlock Text="SYSTEM INITIALIZED"
+                           FontSize="11"
+                           FontWeight="Bold"
+                           Foreground="#81ecff"
+                           HorizontalAlignment="Center"
+                           Opacity="0.8"
+                           Margin="0,0,0,8" />
 
-            <!-- Tagline -->
-            <TextBlock Text="A Turn-Based Racing Simulation"
-                       FontSize="16"
-                       Foreground="#94a3b8"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,20" />
+                <!-- Game Title -->
+                <TextBlock Text="C# NEED FOR SPEED"
+                           FontSize="56"
+                           FontWeight="Black"
+                           Foreground="#84adff"
+                           HorizontalAlignment="Center" />
 
-            <!-- Start Race Button -->
-            <Button Content="Start Race"
-                    Command="{Binding StartRaceCommand}"
-                    HorizontalAlignment="Center"
-                    Width="200"
-                    Height="45"
-                    FontSize="18"
-                    FontWeight="Bold"
-                    Background="#2563eb"
-                    Foreground="White"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
+                <!-- Tagline -->
+                <TextBlock Text="A TURN-BASED RACING SIMULATION"
+                           FontSize="13"
+                           FontWeight="Medium"
+                           Foreground="#a5abb9"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,40" />
 
-            <!-- Instructions Button -->
-            <Button Content="How to Play"
-                    Command="{Binding ToggleInstructionsCommand}"
-                    HorizontalAlignment="Center"
-                    Width="200"
-                    Height="40"
-                    FontSize="14"
-                    Background="#1e293b"
-                    Foreground="#94a3b8"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
-
-            <!-- Quit Button -->
-            <Button Content="Quit"
-                    Command="{Binding QuitCommand}"
-                    HorizontalAlignment="Center"
-                    Width="200"
-                    Height="40"
-                    FontSize="14"
-                    Background="#1e40af"
-                    Foreground="White"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    CornerRadius="8" />
-        </StackPanel>
-
-        <!-- Instructions Overlay -->
-        <Border Background="#DD000000"
-                IsVisible="{Binding ShowInstructions}"
-                CornerRadius="0">
-            <Border Background="#1e293b"
-                    CornerRadius="12"
-                    Padding="30"
-                    MaxWidth="480"
-                    MaxHeight="350"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    BorderBrush="#3b82f6"
-                    BorderThickness="2">
-                <StackPanel Spacing="15">
-                    <ScrollViewer MaxHeight="240">
-                        <TextBlock Text="{Binding InstructionsText}"
-                                   FontSize="13"
-                                   Foreground="#cbd5e1"
-                                   TextWrapping="Wrap"
-                                   FontFamily="Consolas,Courier New,monospace" />
-                    </ScrollViewer>
-                    <Button Content="Close"
-                            Command="{Binding ToggleInstructionsCommand}"
-                            HorizontalAlignment="Center"
-                            Width="120"
-                            Height="35"
-                            Background="#2563eb"
-                            Foreground="White"
+                <!-- Navigation Buttons -->
+                <StackPanel Spacing="10" Width="280" HorizontalAlignment="Center">
+                    <!-- Start Race -->
+                    <Button Command="{Binding StartRaceCommand}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            Background="#6c9fff"
+                            Foreground="#000000"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            CornerRadius="6" />
+                            CornerRadius="4">
+                        <TextBlock Text="START RACE"
+                                   FontSize="14"
+                                   FontWeight="Black" />
+                    </Button>
+
+                    <!-- How to Play -->
+                    <Button Command="{Binding ToggleInstructionsCommand}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            Background="#3e4758"
+                            Foreground="#c7d0e5"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CornerRadius="4">
+                        <TextBlock Text="HOW TO PLAY"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                    </Button>
+
+                    <!-- Quit -->
+                    <Button Command="{Binding QuitCommand}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            Background="Transparent"
+                            Foreground="#707582"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CornerRadius="4">
+                        <TextBlock Text="QUIT"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                    </Button>
                 </StackPanel>
+            </StackPanel>
+
+            <!-- Ambient Telemetry - Bottom Left -->
+            <StackPanel VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left"
+                        Margin="40,0,0,40"
+                        Opacity="0.4">
+                <Border BorderBrush="#84adff" BorderThickness="1,0,0,0" Padding="12,0,0,0">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="ENGINE_CORE"
+                                   FontSize="10"
+                                   FontWeight="Black"
+                                   Foreground="#84adff" />
+                        <TextBlock Text="v2.4.0-stable"
+                                   FontSize="10"
+                                   FontWeight="Medium"
+                                   Foreground="#a5abb9" />
+                        <Grid Width="120" Height="4" Margin="0,4,0,0">
+                            <Border Background="#1e2635" CornerRadius="0" />
+                            <Border Background="#81ecff" CornerRadius="0"
+                                    HorizontalAlignment="Left" Width="90" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Ambient Telemetry - Top Right -->
+            <StackPanel VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="0,30,40,0"
+                        Opacity="0.4">
+                <TextBlock Text="NETWORK STATUS"
+                           FontSize="10"
+                           FontWeight="Black"
+                           Foreground="#84adff"
+                           HorizontalAlignment="Right" />
+                <StackPanel Orientation="Horizontal" Spacing="2"
+                            HorizontalAlignment="Right" Margin="0,4,0,0">
+                    <Border Width="4" Height="12" Background="#81ecff" />
+                    <Border Width="4" Height="12" Background="#81ecff" />
+                    <Border Width="4" Height="12" Background="#81ecff" />
+                    <Border Width="4" Height="12" Background="#1e2635" />
+                </StackPanel>
+                <TextBlock Text="LATENCY: 14MS"
+                           FontSize="10"
+                           FontWeight="Medium"
+                           Foreground="#a5abb9"
+                           HorizontalAlignment="Right"
+                           Margin="0,4,0,0" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Bottom Accent Line -->
+        <Border Grid.Row="2" Height="2" Background="#84adff" Opacity="0.2" />
+
+        <!-- Instructions Overlay -->
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                Background="#CC080e18"
+                IsVisible="{Binding ShowInstructions}">
+            <Border Background="#131a26"
+                    Padding="40"
+                    MaxWidth="600"
+                    MaxHeight="480"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    CornerRadius="4">
+                <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+                    <!-- Title -->
+                    <TextBlock Grid.Row="0"
+                               Text="HOW TO PLAY"
+                               FontSize="36"
+                               FontWeight="Bold"
+                               Foreground="#84adff"
+                               Margin="0,0,0,4" />
+                    <TextBlock Grid.Row="1"
+                               Text="SYSTEM MANUAL // REVISION 1.0.4"
+                               FontSize="10"
+                               FontWeight="Medium"
+                               Foreground="#a5abb9"
+                               Margin="0,0,0,20" />
+
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="2" MaxHeight="280">
+                        <TextBlock Text="{Binding InstructionsText}"
+                                   FontSize="13"
+                                   Foreground="#a5abb9"
+                                   TextWrapping="Wrap"
+                                   FontFamily="Consolas,Courier New,monospace"
+                                   LineHeight="22" />
+                    </ScrollViewer>
+
+                    <!-- Separator -->
+                    <Border Grid.Row="3" Height="1" Background="#424854" Opacity="0.2" Margin="0,16,0,16" />
+
+                    <!-- Close Button -->
+                    <Button Grid.Row="4"
+                            Content="BACK TO START"
+                            Command="{Binding ToggleInstructionsCommand}"
+                            HorizontalAlignment="Stretch"
+                            Height="48"
+                            FontSize="13"
+                            FontWeight="Bold"
+                            Background="#84adff"
+                            Foreground="#002d64"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            CornerRadius="4" />
+                </Grid>
             </Border>
         </Border>
     </Grid>

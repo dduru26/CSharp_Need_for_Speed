@@ -101,10 +101,10 @@ namespace CSharpNeedforSpeed.Views
             if (value is bool isPositive)
             {
                 return isPositive
-                    ? new SolidColorBrush(Color.Parse("#22d3ee"))
-                    : new SolidColorBrush(Color.Parse("#f87171"));
+                    ? new SolidColorBrush(Color.Parse("#81ecff"))
+                    : new SolidColorBrush(Color.Parse("#ff716c"));
             }
-            return new SolidColorBrush(Color.Parse("#94a3b8"));
+            return new SolidColorBrush(Color.Parse("#a5abb9"));
         }
 
         /// <summary>
